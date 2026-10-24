@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Seja um Bilionário</title>
+<style>
+*{box-sizing:border-box}
+:root{--green:#26e987;--gold:#ffd568;--bg:#07110d}
+body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif;min-height:100vh}
+button{cursor:pointer;font-weight:bold;color:white;border:1px solid #286747;background:#123524;border-radius:14px;padding:12px;font-size:14px}
+button:active{transform:scale(.96)}
+button:disabled{opacity:.4;cursor:not-allowed}
+header{padding:18px 15px;background:linear-gradient(120deg,#103d27,#07110d);border-bottom:1px solid #23613f}
+.brand{color:var(--green);font-weight:900;letter-spacing:2px;font-size:22px}
+.subtitle{font-size:12px;color:#a7cbb5;margin-top:5px}
+main{max-width:900px;margin:auto;padding:14px;display:grid;gap:14px}
+.panel{background:#0d1e15;border:1px solid #1e4931;border-radius:19px;padding:16px}
+.money-label{font-size:12px;color:#a8c8b4;letter-spacing:1px}
+.money{font-size:clamp(28px,8vw,43px);font-weight:900;color:var(--gold);overflow-wrap:anywhere;margin:8px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#10281b;border-radius:12px;padding:11px 7px;text-align:center}
+.stat small{color:#a7c5b1;font-size:11px}
+.stat strong{display:block;margin-top:7px;font-size:17px}
+#coinArea{position:relative;overflow:hidden;text-align:center;padding:18px 0 8px}
+#coin{width:190px;height:190px;max-width:60vw;max-height:60vw;border-radius:50%;border:5px solid #ffe8a0;background:radial-gradient(circle at 30% 25%,#fff0a4,#ffbd32 40%,#bd7100 78%,#744000);box-shadow:0 0 25px #ffcf4b55,inset 0 0 18px #fff7b5;display:flex;align-items:center;justify-content:center;font-size:95px;touch-action:manipulation;user-select:none;transition:transform .08s}
+#coin:active{transform:scale(.91) rotate(-5deg)}
+#coinText{font-size:14px;color:#c1d7c8;margin:13px 0}
+.float{position:absolute;color:#8cffb4;font-weight:900;font-size:23px;pointer-events:none;animation:float .85s ease-out forwards;text-shadow:0 2px 5px #000;z-index:3}
+@keyframes float{0%{opacity:0;transform:translateY(10px) scale(.7)}15%{opacity:1}100%{opacity:0;transform:translateY(-100px) scale(1.3)}}
+@keyframes shine{50%{filter:brightness(1.35)}}
+h2{font-size:17px;margin:0 0 13px}
+.sectionHead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.badge{font-size:11px;color:var(--green);background:#153c28;padding:6px 9px;border-radius:20px}
+.progress{height:10px;background:#20382a;border-radius:20px;overflow:hidden;margin:12px 0}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#22d875,#ffe16b);transition:width .25s}
+#goalText{font-size:13px;color:#c0d6c8;line-height:1.5}
+.shop{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.item{background:#10271a;border:1px solid #27543a;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.item .emoji{font-size:28px}
+.item b{font-size:14px}
+.item small{color:#b0c9b9;line-height:1.4}
+.item button{margin-top:auto;background:#1d5a38}
+.item button span{color:#ffe08a}
+#notice{color:#9ef8bd;font-size:13px;min-height:18px;text-align:center}
+footer{text-align:center;color:#6e9280;font-size:11px;padding:10px 15px 25px}
+@media(min-width:650px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}.shop{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">💸 SEJA UM BILIONÁRIO</div>
+ <div class="subtitle">CLIQUE • GANHE • COMPRE • EVOLUA</div>
+</header>
+<main>
+ <section class="panel wide">
+  <div class="money-label">SEU DINHEIRO VIRTUAL</div>
+  <div class="money" id="money">R$ 0,00</div>
+  <div class="stats">
+   <div class="stat"><small>CLIQUES</small><strong id="clicks">0</strong></div>
+   <div class="stat"><small>POR CLIQUE</small><strong id="perClick">R$ 1</strong></div>
+   <div class="stat"><small>NÍVEL</small><strong id="level">1 🥉</strong></div>
+  </div>
+ </section>
+
+ <section class="panel" id="coinArea">
+  <button id="coin" aria-label="Ganhar dinheiro">💰</button>
+  <div id="coinText">TOQUE NA MOEDA PARA GANHAR!</div>
+  <div style="font-size:12px;color:#8eb49b">Cada clique rende dinheiro virtual.</div>
+ </section>
+
+ <section class="panel">
+  <div class="sectionHead">
+   <h2>🎯 Próxima meta</h2>
+   <span class="badge" id="goalBadge">INICIANTE</span>
+  </div>
+  <div id="goalText">Faça 10 cliques para completar sua primeira meta.</div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="sectionHead">
+   <span style="font-size:12px;color:#a6c5b2" id="goalCount">0 / 10 cliques</span>
+   <span style="font-size:12px;color:#ffe08a" id="goalReward">Prêmio: R$ 10</span>
+  </div>
+ </section>
+
+ <section class="panel">
+  <div class="sectionHead"><h2>🚀 Evoluções</h2><span class="badge">MELHORE</span></div>
+  <div class="shop" id="shop"></div>
+ </section>
+
+ <section class="panel wide">
+  <div class="sectionHead"><h2>👑 Sua jornada</h2><span class="badge" id="rank">POBRE</span></div>
+  <p id="journey" style="font-size:13px;color:#bdd4c5;line-height:1.6">Seu império começa agora!</p>
+  <div class="sectionHead" style="margin-top:14px">
+   <button id="sound">🔊 Som ligado</button>
+   <button id="save">💾 Salvar</button>
+   <button id="reset" style="border-color:#814444">Reiniciar</button>
+  </div>
+  <p style="font-size:11px;color:#789985;line-height:1.5">O dinheiro é apenas do jogo. Não pode ser sacado nem convertido em reais verdadeiros.</p>
+ </section>
+ <div id="notice" class="wide"></div>
+</main>
+<footer>SEJA UM BILIONÁRIO • VAGA HEJHE • Jogo offline</footer>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const goals=[
+ {n:10,reward:10,title:"Primeiros passos",rank:"INICIANTE"},
+ {n:50,reward:50,title:"Caçador de moedas",rank:"COLETOR"},
+ {n:100,reward:150,title:"Pequeno empreendedor",rank:"EMPREENDEDOR"},
+ {n:500,reward:700,title:"Empresário",rank:"EMPRESÁRIO"},
+ {n:1000,reward:2000,title:"Mil cliques!",rank:"MILIONÁRIO EM TREINO"},
+ {n:4000,reward:10000,title:"Lenda dos cliques",rank:"MAGNATA"},
+ {n:10000,reward:50000,title:"Rei do dinheiro",rank:"REI DO DINHEIRO"},
+ {n:50000,reward:250000,title:"Quase bilionário",rank:"TITÃ"},
+ {n:100000,reward:1000000,title:"Lenda bilionária",rank:"BILIONÁRIO"}
+];
+const upgrades=[
+ {name:"Dedos velozes",icon:"👆",desc:"+R$ 1 por clique",base:25,add:1},
+ {name:"Mouse dourado",icon:"🖱️",desc:"+R$ 5 por clique",base:150,add:5},
+ {name:"Luvas de ouro",icon:"🧤",desc:"+R$ 25 por clique",base:900,add:25},
+ {name:"Máquina de dinheiro",icon:"🏭",desc:"Ganha R$ 10 por segundo",base:500,auto:10},
+ {name:"Banco particular",icon:"🏦",desc:"Ganha R$ 100 por segundo",base:5000,auto:100},
+ {name:"Fábrica bilionária",icon:"🏙️",desc:"Ganha R$ 1.000 por segundo",base:50000,auto:1000}
+];
+let state={money:0,clicks:0,level:1,clickPower:1,auto:0,bought:Array(6).fill(0),claimed:[],sound:true};
+let noticeTimer,saveTimer,lastAuto=Date.now();
+function fmt(n){
+ if(n>=1e15)return "R$ "+(n/1e15).toFixed(2)+" Q";
+ if(n>=1e12)return "R$ "+(n/1e12).toFixed(2)+" T";
+ if(n>=1e9)return "R$ "+(n/1e9).toFixed(2)+" B";
+ if(n>=1e6)return "R$ "+(n/1e6).toFixed(2)+" M";
+ if(n>=1000)return "R$ "+n.toLocaleString("pt-BR",{maximumFractionDigits:0});
+ return "R$ "+n.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function save(){
+ try{localStorage.setItem("bilionario_save",JSON.stringify(state));notice("Progresso salvo! 💚")}
+ catch(e){notice("Não foi possível salvar neste navegador.")}
+}
+function load(){
+ try{
+  const raw=localStorage.getItem("bilionario_save");
+  if(raw){const s=JSON.parse(raw);state={...state,...s};if(!Array.isArray(state.bought)||state.bought.length!==6)state.bought=Array(6).fill(0);if(!Array.isArray(state.claimed))state.claimed=[]}
+ }catch(e){}
+}
+function notice(s){
+ $("notice").textContent=s;clearTimeout(noticeTimer);
+ noticeTimer=setTimeout(()=>$("notice").textContent="",2400);
+}
+let audioCtx;
+function beep(freq=700,duration=.07,type="sine"){
+ if(!state.sound)return;
+ try{
+  audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(.08,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+  o.connect(g);g.connect(audioCtx.destination);
+  o.start();o.stop(audioCtx.currentTime+duration);
+ }catch(e){}
+}
+function floatText(text){
+ const area=$("coinArea"),r=$("coin").getBoundingClientRect(),a=area.getBoundingClientRect();
+ const el=document.createElement("div");el.className="float";el.textContent=text;
+ el.style.left=(r.left-a.left+r.width*.5-25+(Math.random()-.5)*75)+"px";
+ el.style.top=(r.top-a.top+20)+"px";area.appendChild(el);
+ setTimeout(()=>el.remove(),900);
+}
+function clickCoin(){
+ state.clicks++;
+ state.money+=state.clickPower;
+ floatText("+"+fmt(state.clickPower));
+ beep(550+Math.random()*400,.06,"sine");
+ if(state.clicks%10===0)beep(950,.12,"triangle");
+ checkGoals();render();
+}
+function checkGoals(){
+ for(let i=0;i<goals.length;i++){
+  const g=goals[i];
+  if(state.clicks>=g.n&&!state.claimed.includes(i)){
+   state.claimed.push(i);state.money+=g.reward;
+   notice("🏆 META CONCLUÍDA: "+g.title+"! Prêmio "+fmt(g.reward));
+   beep(1000,.2,"triangle");
+  }
+ }
+}
+function cost(i){return Math.floor(upgrades[i].base*Math.pow(1.65,state.bought[i]))}
+function buy(i){
+ const u=upgrades[i],c=cost(i);
+ if(state.money<c){notice("Junte mais dinheiro para comprar!");beep(180,.1,"square");return}
+ state.money-=c;state.bought[i]++;
+ if(u.add)state.clickPower+=u.add;
+ if(u.auto)state.auto+=u.auto;
+ notice("Comprado: "+u.name+"! 🚀");beep(800,.12,"triangle");render();
+}
+function renderShop(){
+ $("shop").innerHTML="";
+ upgrades.forEach((u,i)=>{
+  const c=cost(i),el=document.createElement("div");el.className="item";
+  el.innerHTML='<div class="emoji">'+u.icon+'</div><b>'+u.name+'</b><small>'+u.desc+'</small><small>Possui: '+state.bought[i]+'</small><button '+(state.money<c?'disabled':'')+'>Comprar<br><span>'+fmt(c)+'</span></button>';
+  el.querySelector("button").onclick=()=>buy(i);$("shop").appendChild(el);
+ });
+}
+function render(){
+ $("money").textContent=fmt(state.money);
+ $("clicks").textContent=state.clicks.toLocaleString("pt-BR");
+ $("perClick").textContent=fmt(state.clickPower);
+ $("level").textContent=state.level+" "+(state.level>=9?"👑":state.level>=6?"💎":state.level>=3?"🥇":"🥉");
+ const next=goals.find((g,i)=>!state.claimed.includes(i));
+ if(next){
+  const idx=goals.indexOf(next),prev=idx===0?0:goals[idx-1].n;
+  $("goalText").textContent="Faça "+next.n.toLocaleString("pt-BR")+" cliques para ganhar "+fmt(next.reward)+".";
+  $("goalCount").textContent=Math.min(state.clicks,next.n).toLocaleString("pt-BR")+" / "+next.n.toLocaleString("pt-BR")+" cliques";
+  $("goalReward").textContent="Prêmio: "+fmt(next.reward);
+  $("goalBadge").textContent=next.rank;
+  $("bar").style.width=Math.min(100,state.clicks/next.n*100)+"%";
+ }else{
+  $("goalText").textContent="Todas as metas concluídas! Continue evoluindo seu império.";
+  $("goalCount").textContent="Todas concluídas";
+  $("goalReward").textContent="🏆 Campeão";
+  $("goalBadge").textContent="LENDÁRIO";$("bar").style.width="100%";
+ }
+ $("rank").textContent=state.money>=1e9?"BILIONÁRIO 👑":state.money>=1e6?"MILIONÁRIO 💎":state.money>=1e4?"MAGNATA 🏦":state.money>=1000?"EMPRESÁRIO 🏢":"INICIANTE 🌱";
+ $("journey").textContent="Você já fez "+state.clicks.toLocaleString("pt-BR")+" cliques. Sua renda automática é "+fmt(state.auto)+" por segundo. "+(state.money>=1e9?"Você chegou a R$ 1 bilhão virtual!": "Próximo objetivo: crescer e chegar ao bilhão!");
+ $("coinText").textContent="TOQUE PARA GANHAR "+fmt(state.clickPower)+"!";
+ $("sound").textContent=state.sound?"🔊 Som ligado":"🔇 Som desligado";
+ renderShop();
+}
+$("coin").addEventListener("click",clickCoin);
+$("coin").addEventListener("touchstart",()=>{}, {passive:true});
+$("sound").onclick=()=>{state.sound=!state.sound;render();beep(650)};
+$("save").onclick=save;
+$("reset").onclick=()=>{
+ if(confirm("Tem certeza que deseja apagar todo seu progresso?")){
+  localStorage.removeItem("bilionario_save");
+  state={money:0,clicks:0,level:1,clickPower:1,auto:0,bought:Array(6).fill(0),claimed:[],sound:true};
+  render();notice("Jogo reiniciado!");
+ }
+};
+load();render();
+setInterval(()=>{
+ const now=Date.now(),dt=Math.min(2,(now-lastAuto)/1000);lastAuto=now;
+ if(state.auto>0){state.money+=state.auto*dt;render()}
+},1000);
+setInterval(()=>{try{localStorage.setItem("bilionario_save",JSON.stringify(state))}catch(e){}},5000);
+})();
+</script>
+</body>
+</html>
